@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bujhau Uploader — returning to the app</title>
+<style>body{font-family:"Segoe UI",sans-serif;max-width:640px;margin:60px auto;padding:0 20px;color:#1d2433;text-align:center}h1{color:#12203A}</style>
+</head>
+<body>
+<h1>Bujhau Uploader</h1>
+<p id="msg">Returning to Bujhau Uploader on this computer…</p>
+<script>
+// TikTok redirects here after the user authorizes. This page sends the one-time
+// authorization code back to the uploader running on the same computer (localhost).
+// Nothing is stored or sent anywhere else.
+(function () {
+  var q = new URLSearchParams(location.search);
+  if (q.get('error')) {
+    document.getElementById('msg').textContent = 'Authorization was cancelled or failed: ' + q.get('error');
+    return;
+  }
+  if (!q.get('code')) {
+    document.getElementById('msg').textContent = 'No authorization code received.';
+    return;
+  }
+  var p = new URLSearchParams({code: q.get('code'), state: q.get('state') || ''});
+  location.replace('http://localhost:8766/tiktok/callback?' + p.toString());
+})();
+</script>
+</body>
+</html>
